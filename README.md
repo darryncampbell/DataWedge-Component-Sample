@@ -8,9 +8,14 @@ For StartActivity and StartService, being able to specify the service allows you
 
 When configured to Send Broadcast Intents, the ability to specify the component now allows DataWedge to send **explicit Intents**, this has long been a customer request as **it can help applications receive scans when in the background**.
 
-Android 8.0 introduced [limits on how Broadcast Intents are received](https://developer.android.com/about/versions/oreo/background#broadcasts), essentially, applications could no longer receive implicit Intents that had been declared in their manifest and had to be running in the foreground (or a foreground service) to receive an implicit Intents.  DataWedge was previously only capable of sending implicit Intents which made upgrading to Oreo more complicated.  One exception to the Android 8.0 background limits was that it **did not apply to explicit Intents**, therefore applications who have been written to receive their DataWedge intents via broadcast and declared in the application manifest *can upgrade to Oreo without modifying their application, provided they specify a Component for the Intent*.
+Android 8.0 introduced [limits on how Broadcast Intents are received](https://developer.android.com/about/versions/oreo/background#broadcasts), which meant applications could no longer receive implicit Intents that had been declared in their manifest and had to be running in the foreground (or a foreground service) to receive implicit Intents.  
+
+DataWedge was previously only capable of sending implicit Intents which made upgrading to Oreo more complicated.  One exception to the Android 8.0 background limits was that it **did not apply to explicit Intents**, therefore applications who have been written to receive their DataWedge intents via broadcast and declared in the application manifest **can upgrade to Oreo without modifying their application, provided they specify a Component for the Intent**.
 
 This application has been written to demonstrate how to receive scans via Android Intents on an Android Oreo device (or higher) running DataWedge 8.0+
+
+![App](https://github.com/darryncampbell/DataWedge-Component-Sample/raw/master/screenshots/app.jpg)
+
 
 The broadcast receiver is declared in the application manifest as follows:
 ```xml
@@ -46,68 +51,40 @@ public class MyReceiver extends BroadcastReceiver {
 }
 ```
 
-As part of application setup, if the app detects DataWedge 8.0+ is running, "Profile0 (default)" will be modified to send scans to this application via Intents.
-
 **Caveats**:
-- If you do not want "Profile0 (default)" modified then modify the source code before running this app
 - If you have previously used the DataWedge API [SetDefaultProfile](https://techdocs.zebra.com/datawedge/8-0/guide/api/setdefaultprofile/) then this application may not appear to work because the "Profile0 (default)" settings are never applied. 
+- After boot, you may need to wait a few seconds for the scanning service to fully enable.  During this period, the scanner beam will not emit.
+- Do not force close the app which will receive scans in the background.  It is best practice to prevent your end users from accessing the application settings, thereby preventing them from manually closing your app.
 
 ## DataWedge setup
 
-todo images here
+This article assumes familiarity with Zebra's DataWedge tool as well as the DataWedge profile mechanism.  For an overview of DataWedge, please refer to the [DataWedge Techdocs page](https://techdocs.zebra.com/datawedge/latest/guide/overview/)
 
+The aim is to have DataWedge send a broadcast intent when the application is in the background, this means we will not know the foreground application.  Since we do not know the foreground application then both the **default** and **Launcher** profiles need to be modified.  Typically the default profile on DataWedge is called **Profile0 (default)**
 
-Current reception via StartActivity:
+If you press the 'Modify Default and Launcher Profiles' button the profiles will be automatically configured for you:
 
-```xml
-<activity
-  android:name=".MainActivity"
-  android:label="@string/app_name_long"
-  android:theme="@style/AppTheme.NoActionBar">
-  <intent-filter>
-    <action android:name="android.intent.action.MAIN" />
-    <category android:name="android.intent.category.LAUNCHER" />
-  </intent-filter>
-  <intent-filter>
-    <action android:name="com.zebra.dwapiexerciser.ACTION" />
-    <category android:name="android.intent.category.DEFAULT" />
-  </intent-filter>
-</activity>
-```
+- Scanner input plugin enabled
+- Intent output plugin enabled
+- Intent output action set to 'com.zebra.datawedge.scan'
+- Intent output delivery method set to 'Broadcast intent'
+- Intent output component set to this app
+- Intent output component signature check disabled
 
+![DataWedge 1](https://github.com/darryncampbell/DataWedge-Component-Sample/raw/master/screenshots/dw_1.jpg)
+![DataWedge 2](https://github.com/darryncampbell/DataWedge-Component-Sample/raw/master/screenshots/dw_2.jpg)
 
-Current reception via StartService:
+### Signature check
 
-```xml
-<service
-  android:name=".ListeningService"
-  android:enabled="true"
-  android:exported="true" >
-  <intent-filter>
-    <action android:name="com.zebra.dwapiexerciser.ACTION" />
-    <category android:name="android.intent.category.DEFAULT" />
-  </intent-filter>
-</service>
-```
+The [DataWedge documentation](https://techdocs.zebra.com/datawedge/8-0/guide/output/intent/) gives a good explanation of why you might want to enable signature check on a production deployment but for the purposes of this demo it is easiest to leave the check disabled.  For more information on generating these signatures then I wrote a [guide](https://github.com/darryncampbell/MX-SignatureAuthentication-Demo) 
 
-Current reception via Broadcast (dynamic receiver)
+## Running the application
 
-```java
-IntentFilter filter = new IntentFilter();
-filter.addAction("com.symbol.datawedge.api.RESULT_ACTION");
-filter.addAction("com.symbol.datawedge.api.NOTIFICATION_ACTION");  
-filter.addAction("com.zebra.dwapiexerciser.ACTION");
-filter.addCategory(Intent.CATEGORY_DEFAULT);
-registerReceiver(myBroadcastReceiver, filter);
-```
+After configuring DataWedge you should be able to scan barcodes regardless of the foreground application, provided that application does not have its own DataWedge profile associated with it.
 
+![Scanning](https://github.com/darryncampbell/DataWedge-Component-Sample/raw/master/screenshots/scan_1.jpg)
+![Scanning](https://github.com/darryncampbell/DataWedge-Component-Sample/raw/master/screenshots/scan_2.jpg)
+![Scanning](https://github.com/darryncampbell/DataWedge-Component-Sample/raw/master/screenshots/scan_3.jpg)
+![Scanning](https://github.com/darryncampbell/DataWedge-Component-Sample/raw/master/screenshots/scan_4.jpg)
+![Scanning](https://github.com/darryncampbell/DataWedge-Component-Sample/raw/master/screenshots/scan_5.jpg)
 
-
-
-
-
-
-Wait for scanner service to be ready after boot
-Do not force close app (prevent users from accessing settings)
-
-Signature??
