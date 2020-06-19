@@ -82,9 +82,14 @@ The [DataWedge documentation](https://techdocs.zebra.com/datawedge/8-0/guide/out
 
 After configuring DataWedge you should be able to scan barcodes regardless of the foreground application, provided that application does not have its own DataWedge profile associated with it.
 
+Note the toast in each of the screenshots below
+
 ![Scanning](https://github.com/darryncampbell/DataWedge-Component-Sample/raw/master/screenshots/scan_1.jpg)
 ![Scanning](https://github.com/darryncampbell/DataWedge-Component-Sample/raw/master/screenshots/scan_2.jpg)
 ![Scanning](https://github.com/darryncampbell/DataWedge-Component-Sample/raw/master/screenshots/scan_3.jpg)
 ![Scanning](https://github.com/darryncampbell/DataWedge-Component-Sample/raw/master/screenshots/scan_4.jpg)
 ![Scanning](https://github.com/darryncampbell/DataWedge-Component-Sample/raw/master/screenshots/scan_5.jpg)
 
+## Further information about receiving scans in the background
+
+This project presents an alternative approach to that given in [https://github.com/darryncampbell/DataWedge-Background-Scanning](https://github.com/darryncampbell/DataWedge-Background-Scanning), that project uses a service whereas this project uses a broadcast Intent.
