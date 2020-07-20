@@ -4,7 +4,7 @@ DataWedge 8.0 introduced a new capability to the DataWedge Intent output plugin,
 
 Up until version 8.0, DataWedge only allowed you to specify the action, category and delivery mechanism (Start Activity, Start Service or Send Broadcast)
 
-For StartActivity and StartService, being able to specify the service allows you to be certain which application will receive the Intent.  Before DataWedge 8.0 the system would select a single activity whose Intent filter matched the appropriate action.  So, if you had two activities which had the same intent-filter action, which activity received the scan would be left to chance (similarly, if you had two services whose intent-filter specified the same action then only one service would receive the scan).  For this reason, being able to specify the component makes the delivery more secure and reliable.
+For StartActivity and StartService, being able to specify the component allows you to be certain which application will receive the Intent.  Before DataWedge 8.0 the system would select a single activity whose Intent filter matched the appropriate action.  So, if you had two activities which had the same intent-filter action, which activity received the scan would be left to chance (similarly, if you had two services whose intent-filter specified the same action then only one service would receive the scan).  For this reason, being able to specify the component makes the delivery more secure and reliable.
 
 When configured to Send Broadcast Intents, the ability to specify the component now allows DataWedge to send **explicit Intents**, this has long been a customer request as **it can help applications receive scans when in the background**.
 
@@ -92,4 +92,4 @@ Note the toast in each of the screenshots below
 
 ## Further information about receiving scans in the background
 
-This project presents an alternative approach to that given in [https://github.com/darryncampbell/DataWedge-Background-Scanning](https://github.com/darryncampbell/DataWedge-Background-Scanning), that project uses a service whereas this project uses a broadcast Intent.
+This project presents an alternative approach to that given in [https://github.com/darryncampbell/DataWedge-Background-Scanning](https://github.com/darryncampbell/DataWedge-Background-Scanning); that project uses a service whereas this project uses a broadcast Intent.
