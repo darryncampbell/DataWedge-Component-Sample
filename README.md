@@ -1,3 +1,6 @@
+*Please be aware that this application / sample is provided as-is for demonstration purposes without any guarantee of support*
+=========================================================
+
 # DataWedge Component Sample
 
 DataWedge 8.0 introduced a new capability to the DataWedge Intent output plugin, [the ability to specify the **component** of the application which will receive the Intent](https://techdocs.zebra.com/datawedge/latest/guide/output/intent/#intentoutputsetup)
